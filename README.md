@@ -14,6 +14,7 @@
 | s      | Struct member | Member variable of a struct  | Structs |
 | u      | Union member  | Member variable of a union   | Unions  |
 | p      | Pointer       | Variable is a pointer        | Any     |
-| r      | Reference     | Variable is a reference      | Any     |
-| C      | Const         | Variable is a constant       | Any     |
+| r      | Reference     | | Any     |
+| C      | Const         | | Classes, structs amd unions  |
+| M      | Mutable       | | Classes, structs amd unions  |
 | g      | Global        | This should not be used ever | Never   |
