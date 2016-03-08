@@ -10,10 +10,10 @@
 ##Variable Prefixes
 | Prefix | Name          | Description                  | Used in |
 |--------|---------------|------------------------------|---------|
-| m      | Member        | Member variable of a class   | Classes |
-| s      | Struct member | Member variable of a struct  | Structs |
-| u      | Union member  | Member variable of a union   | Unions  |
-| p      | Pointer       | Variable is a pointer        | Any     |
+| m      | Member        |    | Classes |
+| s      | Struct member |   | Structs |
+| u      | Union member  |    | Unions  |
+| p      | Pointer       | | Any     |
 | r      | Reference     | | Any     |
 | C      | Const         | | Classes, structs amd unions  |
 | M      | Mutable       | | Classes, structs amd unions  |
