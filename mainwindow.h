@@ -6,9 +6,11 @@
 namespace Ui {
 class MainWindow;
 }
-
-class MainWindow : public QMainWindow
-{
+/**
+ * @brief The MainWindow class
+ * What do you think this does?
+ */
+class MainWindow : public QMainWindow {
     Q_OBJECT
 
 public:
@@ -16,6 +18,10 @@ public:
     ~MainWindow();
 
 private:
+    /**
+     * @brief mp_ui
+     * Holds the ui QObjects
+     */
     Ui::MainWindow *ui;
 };
 
