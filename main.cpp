@@ -1,5 +1,9 @@
 #include "mainwindow.h"
+
 #include <QApplication>
+#include <QDebug>
+
+#include "lib.h"
 
 /**
  * @brief main
