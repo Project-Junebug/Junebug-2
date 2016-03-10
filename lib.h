@@ -27,8 +27,13 @@ std::string SHA3(std::string input) {
  * @param length - does nothing, just there to satisfy compiler
  * @return A SHA3-512 hash
  */
-std::string operator "" _SHA3_HASH(const char *input, unsigned int length){
-    return SHA3(input);
+
+constexpr const char* operator "" _SHA3_HASH(const char *input, unsigned int length){
+    CryptoPP::SHA3_512 hash;
+    byte digest [CryptoPP::SHA3_512::DIGESTSIZE];
+    hash.CalculateDigest(digest, (byte*)input, length);
+    return (const char*)digest;
 }
+
 
 #endif // LIB_H

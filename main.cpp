@@ -13,8 +13,11 @@
  */
 int main(int argc, char *argv[]){
     QApplication a(argc, argv);
+
     MainWindow w;
     w.show();
+
+    std::string test="ABC123"_SHA3_HASH;
 
     return a.exec();
 }

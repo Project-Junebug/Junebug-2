@@ -3,12 +3,14 @@
 
 /**
  * @brief MainWindow::MainWindow
- * @param parent Parent QWidget
+ * @param parent - Parent QWidget
  */
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
     ui(new Ui::MainWindow) {
+
     ui->setupUi(this);
+    int k=1;
 }
 
 /**
