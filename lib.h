@@ -2,6 +2,7 @@
 #define LIB_H
 
 //Below is shamelessly stolen from https://bcaptain.wordpress.com/2013/10/18/constexpr-hash-function-in-c/
+#include <cctype>
 
 constexpr unsigned int oat_part_one( const std::size_t& h, const char c ) {
     return ( h + static_cast<unsigned int>( c ) );
@@ -31,7 +32,7 @@ constexpr std::size_t string_length( const char* str, std::size_t index = 0 ) {
     return ( str == nullptr || str[index] == '\0' ) ? 0 : 1 + string_length( str, index+1 );
 }
 
-constexpr unsigned int HASHOAT( const char* str, const std::size_t size, const std::size_t idx, const std::size_t h ) {
+constexpr unsigned int HASHOAT( const char* str, const std::size_t size=1009, const std::size_t idx=0, const std::size_t h=0 ) {
     return (
         ( idx == string_length( str ) ) ? (
             (
@@ -65,7 +66,7 @@ constexpr unsigned int HASHOAT( const char* str, const std::size_t size, const s
  * @return the hash of a string
  */
 constexpr unsigned int operator"" _HASH(char const* str, unsigned int length){
-    return HASHOAT(str, length, 41233, 40009);
+    return HASHOAT(str, length);
 }
 
 #endif // LIB_H

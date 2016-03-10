@@ -1,6 +1,5 @@
 #include "pagelist.h"
 
-PageList::PageList()
-{
+PageList::PageList(){
 
 }
