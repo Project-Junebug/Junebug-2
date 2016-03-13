@@ -1,8 +1,10 @@
 #ifndef LIB_H
 #define LIB_H
 
-//Below is shamelessly stolen from https://bcaptain.wordpress.com/2013/10/18/constexpr-hash-function-in-c/
 #include <cctype>
+#include <QString>
+
+//Below is shamelessly stolen from https://bcaptain.wordpress.com/2013/10/18/constexpr-hash-function-in-c/
 
 constexpr unsigned int oat_part_one( const std::size_t& h, const char c ) {
     return ( h + static_cast<unsigned int>( c ) );
@@ -31,7 +33,14 @@ constexpr unsigned int oat_part_six( const std::size_t& h ) {
 constexpr std::size_t string_length( const char* str, std::size_t index = 0 ) {
     return ( str == nullptr || str[index] == '\0' ) ? 0 : 1 + string_length( str, index+1 );
 }
-
+/**
+ * @brief HASHOAT
+ * @param str - String to be hashed
+ * @param size - No clue, don't use
+ * @param idx - No clue, don't use
+ * @param h - No clue, don't use
+ * @return Hash of str
+ */
 constexpr unsigned int HASHOAT( const char* str, const std::size_t size=1009, const std::size_t idx=0, const std::size_t h=0 ) {
     return (
         ( idx == string_length( str ) ) ? (
@@ -66,7 +75,7 @@ constexpr unsigned int HASHOAT( const char* str, const std::size_t size=1009, co
  * @return the hash of a string
  */
 constexpr unsigned int operator"" _HASH(char const* str, unsigned int length){
-    return HASHOAT(str, length);
+    return HASHOAT(str);
 }
 
 #endif // LIB_H
