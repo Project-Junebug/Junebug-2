@@ -2,8 +2,11 @@
 #define MAINWINDOW_H
 
 #include <QMainWindow>
+#include <QString>
 
 #include "pagelist.h"
+
+#define NULL_SAVE_FILE "\u0013"
 
 namespace Ui {
 class MainWindow;
@@ -26,6 +29,14 @@ private slots:
 
     void on_text_lineEdit_returnPressed();
 
+    void on_actionSave_triggered();
+
+    void on_actionSave_As_triggered();
+
+    void on_actionLoad_triggered();
+
+    void on_actionNew_triggered();
+
 private:
     /**
      * @brief mp_ui
@@ -44,8 +55,16 @@ private:
      */
     Page m_current;
 
+    /**
+     * @brief m_saveLocation
+     * Holds the location of the last save
+     */
+    QString m_saveLocation=NULL_SAVE_FILE;
+
     void update();
     void incorrect();
+    void saveTo(QString fileName);
+    bool warn();
 };
 
 #endif // MAINWINDOW_H

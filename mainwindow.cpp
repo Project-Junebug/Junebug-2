@@ -1,7 +1,10 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
 
+#include <QFile>
+#include <QFileDialog>
 #include <QMessageBox>
+#include <QTextStream>
 
 /**
  * @brief MainWindow::MainWindow
@@ -72,4 +75,74 @@ void MainWindow::incorrect(){
 
 void MainWindow::on_text_lineEdit_returnPressed(){
     on_text_nextButton_clicked();
+}
+
+void MainWindow::on_actionSave_triggered(){
+    if(m_saveLocation==NULL_SAVE_FILE) on_actionSave_As_triggered();
+    else saveTo(m_saveLocation);
+}
+
+void MainWindow::on_actionSave_As_triggered(){
+    saveTo(QFileDialog::getSaveFileName(this, tr("Save File"), QString(),
+                                        tr("Save Files (*.sav)")));
+}
+
+/**
+ * @brief MainWindow::saveTo
+ * @param fileName - location to save to
+ * Saves the m_pageList.mM_saveData
+ */
+void MainWindow::saveTo(QString fileName){
+    if (!fileName.isEmpty()) {
+        QFile file(fileName);
+        if (!file.open(QIODevice::WriteOnly)) {
+            QMessageBox::critical(this, tr("Error"), tr("Could not save file"));
+        } else {
+            QTextStream stream(&file);
+            stream << m_pageList.getSaveData();
+            stream.flush();
+            file.close();
+            m_saveLocation=fileName;
+        }
+    }
+}
+
+void MainWindow::on_actionLoad_triggered(){
+    if(!warn()) return;
+
+    m_pageList=PageList();
+
+    QString fileName = QFileDialog::getOpenFileName(this, tr("Open File"), QString(),
+                                                    tr("Save Files (*.sav)"));
+
+    if (!fileName.isEmpty()) {
+        QFile file(fileName);
+        if (!file.open(QIODevice::ReadOnly)) {
+            QMessageBox::critical(this, tr("Error"), tr("Could not open file"));
+            return;
+        }
+        QTextStream in(&file);
+
+        m_pageList.loadSaveData(in.readAll());
+        update();
+
+        file.close();
+        m_saveLocation=fileName;
+    }
+}
+
+bool MainWindow::warn(){
+    return QMessageBox::Yes
+            == QMessageBox(QMessageBox::Information,
+                           "Warning!",
+                           "This will erase your current save.\n"
+                           "Are you really sure you want to do this?",
+                           QMessageBox::Yes|QMessageBox::No
+                           ).exec();
+}
+
+void MainWindow::on_actionNew_triggered(){
+    if(!warn()) return;
+    m_pageList=PageList();
+    update();
 }
