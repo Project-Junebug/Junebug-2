@@ -5,6 +5,9 @@
 #include <QFileDialog>
 #include <QMessageBox>
 #include <QTextStream>
+#include <QStringList>
+
+#include <vector>
 
 /**
  * @brief MainWindow::MainWindow
@@ -37,6 +40,24 @@ void MainWindow::on_text_nextButton_clicked(){
     } else {
         incorrect();
     }
+    ui->text_lineEdit->clear();
+}
+
+void MainWindow::on_check_nextButton_clicked(){
+    if(m_pageList.checkAnswer({
+                              ui->check_1->checkState()==Qt::Checked,
+                              ui->check_2->checkState()==Qt::Checked,
+                              ui->check_3->checkState()==Qt::Checked,
+                              ui->check_4->checkState()==Qt::Checked
+})){
+        update();
+    } else {
+        incorrect();
+    }
+    ui->check_1->setChecked(false);
+    ui->check_2->setChecked(false);
+    ui->check_3->setChecked(false);
+    ui->check_4->setChecked(false);
 }
 
 /**
@@ -45,15 +66,24 @@ void MainWindow::on_text_nextButton_clicked(){
  */
 void MainWindow::update(){
     m_current=m_pageList.getDisplayData();
+    QStringList list = m_current.s_prompt.split(SPLIT);
     switch (m_current.s_type) {
     case PageType::Info:
         ui->stackedWidget->setCurrentWidget(ui->info);
         ui->info_label->setText(m_current.s_text);
         break;
-    case PageType::Question:
+    case PageType::Textbox:
         ui->stackedWidget->setCurrentWidget(ui->text);
         ui->text_label->setText(m_current.s_text);
         ui->text_lineEdit->setPlaceholderText(m_current.s_prompt);
+        break;
+    case PageType::Checkbox:
+        ui->stackedWidget->setCurrentWidget(ui->check);
+        ui->check_1->setText(list.at(0));
+        ui->check_2->setText(list.at(1));
+        ui->check_3->setText(list.at(2));
+        ui->check_4->setText(list.at(3));
+        ui->check_label->setText(m_current.s_text);
         break;
     case PageType::Terminator:
         ui->stackedWidget->setCurrentWidget(ui->terminator);
@@ -76,6 +106,8 @@ void MainWindow::incorrect(){
 void MainWindow::on_text_lineEdit_returnPressed(){
     on_text_nextButton_clicked();
 }
+
+
 
 void MainWindow::on_actionSave_triggered(){
     if(m_saveLocation==NULL_SAVE_FILE) on_actionSave_As_triggered();

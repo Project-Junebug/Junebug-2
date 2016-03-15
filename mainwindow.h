@@ -24,17 +24,14 @@ public:
 
 private slots:
     void on_info_nextButton_clicked();
-
     void on_text_nextButton_clicked();
+    void on_check_nextButton_clicked();
 
     void on_text_lineEdit_returnPressed();
 
     void on_actionSave_triggered();
-
     void on_actionSave_As_triggered();
-
     void on_actionLoad_triggered();
-
     void on_actionNew_triggered();
 
 private:

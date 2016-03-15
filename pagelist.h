@@ -1,15 +1,20 @@
 #ifndef PAGELIST_H
 #define PAGELIST_H
 
-#define QUESTION_SPLIT "\u0011"
+#define SPLIT "\u0011"
 #define CHECKPOINT_SPLIT "\u0012"
 
 #include <QString>
 #include <QStringList>
+#include <QDebug>
+
+#include <vector>
+#include <cassert>
 
 enum class PageType : char {
     Info,
-    Question,
+    Textbox,
+    Checkbox,
     Terminator
 };
 
@@ -28,6 +33,7 @@ struct Page {
      * @param prompt
      */
     Page(PageType type, QString text, unsigned int answer=0, bool isCheckpoint=false, QString prompt="Put your answer here..."){
+        assert((type==PageType::Checkbox)==(prompt.contains(SPLIT)));
         s_type=type;
         s_text=text;
         s_answer=answer;
@@ -55,6 +61,7 @@ public:
     //checkAnswers
     bool checkAnswer() const;
     bool checkAnswer(const QString& answer) const;
+    bool checkAnswer(const std::vector<bool>& answers) const;
 private:
     /**
      * @brief initPages

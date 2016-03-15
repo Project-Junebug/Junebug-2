@@ -1,4 +1,5 @@
 #include <cassert>
+#include <cmath>
 
 #include <QMessageBox>
 
@@ -31,7 +32,7 @@ void PageList::loadSaveData(const QString& saveData) const {
     QStringList split=saveData.split(CHECKPOINT_SPLIT);
     std::vector< QStringList > data;
     for (int i = 0; i < split.size(); ++i) {
-        data.push_back(split.at(i).split(QUESTION_SPLIT));
+        data.push_back(split.at(i).split(SPLIT));
     }
     unsigned int counter = 0;
     unsigned int lastCheckpoint = 0;
@@ -42,7 +43,9 @@ void PageList::loadSaveData(const QString& saveData) const {
             bool isInfo = m_list.at(counter).s_type==PageType::Info;
             auto hash = HASHOAT(data.at(i).at(j).toLower().toUtf8().constData());
             auto current = m_list.at(counter);
-
+            if(!((isInfo || hash==current.s_answer)||(data.size()-1==i && j==data.at(i).length()-1))){
+                int i=1;
+            }
 
             if(isInfo || hash==current.s_answer){
                 mM_saveData+=data.at(i).at(j).toLower();
@@ -51,17 +54,13 @@ void PageList::loadSaveData(const QString& saveData) const {
                     lastCheckpoint=counter;
                     mM_saveData+=CHECKPOINT_SPLIT;
                 } else {
-                    mM_saveData+=QUESTION_SPLIT;
+                    mM_saveData+=SPLIT;
                 }
-
                 ++counter;
-            } else if(data.size()-1==i && j==data.at(i).length()-1){
+            } else {
                 mM_counter=lastCheckpoint;
                 mM_saveData.chop(1);
-                break;
-            } else {
-                QMessageBox::critical(0, "Load Error", "I'm sorry, something's wrong with your save. If you've tried to modify it, put it back how it was.");
-                exit(1);
+                return;
             }
         }
     }
@@ -86,18 +85,39 @@ bool PageList::checkAnswer() const {
     assert(m_current.s_type==PageType::Info);
     assert(mM_counter+1<m_list.size());
     ++mM_counter;
-    mM_saveData+=(m_current.s_isCheckpoint ? CHECKPOINT_SPLIT : QUESTION_SPLIT);
+    mM_saveData+=(m_current.s_isCheckpoint ? CHECKPOINT_SPLIT : SPLIT);
     return true;
 }
 
 bool PageList::checkAnswer(const QString& answer) const {
-    assert(m_current.s_type==PageType::Question);
+    assert(m_current.s_type==PageType::Textbox);
     assert(mM_counter+1<m_list.size());
 
-    if(HASHOAT(answer.toLower().toUtf8().constData())==m_current.s_answer){
+    if(HASHOAT(answer.toUtf8().constData())==m_current.s_answer){
         ++mM_counter;
         mM_saveData+=answer;
-        mM_saveData+=(m_current.s_isCheckpoint ? CHECKPOINT_SPLIT : QUESTION_SPLIT);
+        mM_saveData+=(m_current.s_isCheckpoint ? CHECKPOINT_SPLIT : SPLIT);
+
+        return true;
+    }
+    return false;
+}
+
+bool PageList::checkAnswer(const std::vector<bool> &answers) const{
+    assert(m_current.s_type==PageType::Checkbox);
+    assert(mM_counter+1<m_list.size());
+
+    QString answer="";
+
+    for(unsigned int i = 0; i < answers.size(); ++i) {
+        answer+=QString::number(answers.at(i));
+    }
+
+    //answer is now a QString like "1011"
+    if(HASHOAT(answer.toUtf8().constData())==m_current.s_answer){
+        ++mM_counter;
+        mM_saveData+=answer;
+        mM_saveData+=(m_current.s_isCheckpoint ? CHECKPOINT_SPLIT : SPLIT);
 
         return true;
     }
