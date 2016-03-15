@@ -123,3 +123,24 @@ bool PageList::checkAnswer(const std::vector<bool> &answers) const{
     }
     return false;
 }
+
+#ifndef ACTUAL_QUESTIONS
+
+void PageList::initPages(){
+    m_list={
+        Page(PageType::Info, "Page 0", 0, true),
+        Page(PageType::Textbox, "Question 1, a=123", "123"_HASH),
+        Page(PageType::Textbox, "Question 2, a=123", "123"_HASH),
+        Page(PageType::Textbox, "Question 3, a=123", "123"_HASH),
+        Page(PageType::Checkbox, "Checkbox 4, a=1011", "1011"_HASH, true, "A" SPLIT "B" SPLIT "C" SPLIT "D"),
+        Page(PageType::Checkbox, "Checkbox 5, a=0011", "0011"_HASH, false, "A" SPLIT "B" SPLIT "C" SPLIT "D"),
+        Page(PageType::Checkbox, "Checkbox 6, a=1001", "1001"_HASH, false, "A" SPLIT "B" SPLIT "C" SPLIT "D"),
+        Page(PageType::Checkbox, "Checkbox 7, a=0010", "0010"_HASH, false, "A" SPLIT "B" SPLIT "C" SPLIT "D"),
+        Page(PageType::Textbox, "Question 8, a=123", "123"_HASH, true),
+        Page(PageType::Textbox, "Question 9, a=123", "123"_HASH),
+        Page(PageType::Textbox, "Question 10, a=123", "123"_HASH),
+        Page(PageType::Terminator, "Page 11", 0, true),
+    };
+}
+
+#endif
