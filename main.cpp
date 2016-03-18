@@ -3,7 +3,7 @@
 #include <QApplication>
 #include <QDebug>
 
-#include "lib.h"
+#include "hash.h"
 
 /**
  * @brief main

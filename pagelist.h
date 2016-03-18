@@ -21,7 +21,7 @@ enum class PageType : char {
 struct Page {
     PageType s_type;
     QString s_text;
-    unsigned int s_answer;
+    std::vector<unsigned int> s_answers;
     QString s_prompt;
     bool s_isCheckpoint;
 
@@ -32,11 +32,12 @@ struct Page {
      * @param answer - The answer to the question to be hashed using SHA-3
      * @param prompt
      */
-    Page(PageType type, QString text, unsigned int answer=0, bool isCheckpoint=false, QString prompt="Put your answer here..."){
+    Page(PageType type, QString text, std::vector<unsigned int> answers={}, bool isCheckpoint=false,
+         QString prompt="Put your answer here..."){
         assert((type==PageType::Checkbox)==(prompt.contains(SPLIT)));
         s_type=type;
         s_text=text;
-        s_answer=answer;
+        s_answers=answers;
         s_prompt=prompt;
         s_isCheckpoint=isCheckpoint;
     }
@@ -46,7 +47,7 @@ struct Page {
     Page(){
         s_type=PageType::Terminator;
         s_prompt=s_text="SOMETHING'S CLEARLY WRONG WITH THIS";
-        s_answer=0;
+        s_answers={0};
     }
 };
 
