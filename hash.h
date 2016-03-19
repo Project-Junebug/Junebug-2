@@ -1,8 +1,10 @@
-#ifndef LIB_H
-#define LIB_H
+#ifndef HASH_H
+#define HASH_H
 
 #include <cctype>
 #include <QString>
+
+#define DEFAULT_SIZE 1009
 
 //Below is shamelessly stolen from https://bcaptain.wordpress.com/2013/10/18/constexpr-hash-function-in-c/
 
@@ -41,7 +43,7 @@ constexpr std::size_t string_length( const char* str, std::size_t index = 0 ) {
  * @param h - No clue, don't use
  * @return Hash of str
  */
-constexpr unsigned int HASHOAT( const char* str, const std::size_t size=1009, const std::size_t idx=0, const std::size_t h=0 ) {
+constexpr unsigned int HASHOAT( const char* str, const std::size_t size=DEFAULT_SIZE, const std::size_t idx=0, const std::size_t h=0 ) {
     return (
         ( idx == string_length( str ) ) ? (
             (
@@ -75,7 +77,7 @@ constexpr unsigned int HASHOAT( const char* str, const std::size_t size=1009, co
  * @return the hash of a string
  */
 constexpr unsigned int operator"" _HASH(char const* str, unsigned int length){
-    return HASHOAT(str);
+    return HASHOAT(str, length*0+DEFAULT_SIZE); //To stop "unused parameter" warnings
 }
 
-#endif // LIB_H
+#endif // HASH_H
