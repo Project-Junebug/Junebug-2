@@ -16,8 +16,7 @@ CONFIG += c++14
 SOURCES += main.cpp\
         mainwindow.cpp \
     pagelist.cpp \
-    initquestions.ignore.cpp \
-    lib.cpp
+    initquestions.ignore.cpp
 
 HEADERS  += mainwindow.h \
     pagelist.h \
