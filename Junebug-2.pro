@@ -21,6 +21,7 @@ SOURCES += main.cpp\
 HEADERS  += mainwindow.h \
     pagelist.h \
     hash.h \
+    lib.h \
+    pagelist.h \
     lib.h
-    pagelist.h
 FORMS    += mainwindow.ui

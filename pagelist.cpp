@@ -7,8 +7,6 @@
 #include "hash.h"
 #include "lib.h"
 
-
-
 /**
  * @brief PageList::PageList
  * Ctor for PageList
