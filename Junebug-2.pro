@@ -19,5 +19,8 @@ SOURCES += main.cpp\
     initquestions.ignore.cpp
 
 HEADERS  += mainwindow.h \
+    pagelist.h \
+    hash.h \
+    lib.h
     pagelist.h
 FORMS    += mainwindow.ui
