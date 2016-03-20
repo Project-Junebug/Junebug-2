@@ -72,7 +72,7 @@ void PageList::loadSaveData(const QString& saveData) const {
  */
 Page PageList::getDisplayData() const {
     m_current = m_list.at(mM_counter);
-    return Page(m_current.s_type, m_current.s_text, {0}, false, m_current.s_prompt);
+    return Page(m_current.s_type, QString::number(m_numbers.at(mM_counter))+") "+m_current.s_text, {0}, false, m_current.s_prompt);
 }
 
 /**
@@ -125,7 +125,10 @@ bool PageList::checkAnswer(const std::vector<bool> &answers) const{
 #ifndef ACTUAL_QUESTIONS
 
 void PageList::initPages(){
-    m_list={
+    m_numbers = {0,  1,  2,  3,  4,  5,  6,  7,  8,  9,  10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24,
+                 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49};
+
+    m_list = {
         Page(PageType::Info, "Page 0", {0}, true),
         Page(PageType::Textbox, "Question 1, a=123", {"123"_HASH}),
         Page(PageType::Textbox, "Question 2, a=123 or 1234", {"123"_HASH, "1234"_HASH}),
@@ -133,7 +136,8 @@ void PageList::initPages(){
         Page(PageType::Checkbox, "Checkbox 4, a=1011", {"1011"_HASH}, true, "A" SPLIT "B" SPLIT "C" SPLIT "D"),
         Page(PageType::Checkbox, "Checkbox 5, a=0011", {"0011"_HASH}, false, "A" SPLIT "B" SPLIT "C" SPLIT "D"),
         Page(PageType::Checkbox, "Checkbox 6, a=1001", {"1001"_HASH}, false, "A" SPLIT "B" SPLIT "C" SPLIT "D"),
-        Page(PageType::Checkbox, "Checkbox 7, a=0010 or 0110", {"0010"_HASH, "0110"_HASH}, false, "A" SPLIT "B" SPLIT "C" SPLIT "D"),
+        Page(PageType::Checkbox, "Checkbox 7, a=0010 or 0110", {"0010"_HASH, "0110"_HASH}, false, "A" SPLIT "B" SPLIT
+                                                                                                  "C" SPLIT "D"),
         Page(PageType::Textbox, "Question 8, a=123", {"123"_HASH}, true),
         Page(PageType::Textbox, "Question 9, a=123", {"123"_HASH}),
         Page(PageType::Textbox, "Question 10, a=123", {"123"_HASH}),

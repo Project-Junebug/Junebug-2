@@ -19,6 +19,12 @@ MainWindow::MainWindow(QWidget *parent) :
 
     ui->setupUi(this);
 
+    //Allowing links to be openable
+    for(QLabel* i: {ui->text_label, ui->terminator_label, ui->check_label, ui->info_label}){
+        i->setTextInteractionFlags(Qt::TextBrowserInteraction);
+        i->setOpenExternalLinks(true);
+    }
+
     update();
 }
 

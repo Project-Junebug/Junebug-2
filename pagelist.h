@@ -89,6 +89,12 @@ private:
     std::vector< Page > m_list = {Page()};
 
     /**
+     * @brief m_numbers
+     * Holds the question numbers
+     */
+    std::vector<unsigned long long> m_numbers;
+
+    /**
      * @brief m_current
      * Holds the current Page
      */
