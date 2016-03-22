@@ -72,6 +72,10 @@ void MainWindow::on_check_nextButton_clicked(){
  */
 void MainWindow::update(){
     m_current=m_pageList.getDisplayData();
+    if(m_current.s_isCheckpoint
+            && m_saveLocation!=NULL_SAVE_FILE
+            && m_autoSaveEnabled)
+        on_actionSave_triggered();
     QStringList list = m_current.s_prompt.split(SPLIT);
     switch (m_current.s_type) {
     case PageType::Info:
@@ -136,6 +140,8 @@ void MainWindow::saveTo(QString fileName){
         if (!file.open(QIODevice::WriteOnly)) {
             QMessageBox::critical(this, tr("Error"), tr("Could not save file"));
         } else {
+            file.remove();
+            file.open(QIODevice::WriteOnly);
             QTextStream stream(&file);
             stream << m_pageList.getSaveData();
             stream.flush();
@@ -183,4 +189,8 @@ void MainWindow::on_actionNew_triggered(){
     if(!warn()) return;
     m_pageList=PageList();
     update();
+}
+
+void MainWindow::on_actionAutosave_enabled_toggled(bool newVal){
+    m_autoSaveEnabled=newVal;
 }

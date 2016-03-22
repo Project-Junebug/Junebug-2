@@ -71,6 +71,12 @@ private:
     void initPages();
 
     /**
+     * @brief loadError
+     * Called when the load fails
+     */
+    void loadError() const;
+
+    /**
      * @brief mM_counter
      * Holds the question counter
      */

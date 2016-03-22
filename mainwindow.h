@@ -34,6 +34,8 @@ private slots:
     void on_actionLoad_triggered();
     void on_actionNew_triggered();
 
+    void on_actionAutosave_enabled_toggled(bool newVal);
+
 private:
     /**
      * @brief mp_ui
@@ -58,9 +60,12 @@ private:
      */
     QString m_saveLocation=NULL_SAVE_FILE;
 
+    bool m_autoSaveEnabled = false;
+
     void update();
     void incorrect();
     void saveTo(QString fileName);
+    void load(const bool& debug=false);
     bool warn();
 };
 

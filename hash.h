@@ -2,7 +2,6 @@
 #define HASH_H
 
 #include <cctype>
-#include <QString>
 
 #define DEFAULT_SIZE 1009
 
