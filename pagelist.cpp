@@ -46,16 +46,12 @@ void PageList::loadSaveData(const QString& saveData) const {
     }
     PageList list;
     unsigned int checkpoint = 0;
-    unsigned int lastCheckpoint = 0;
     for (int i = 0; i < data.size(); ++i) {
-        assert(list.mM_counter==i);
         Page current = list.getDisplayData();
         if(current.s_isCheckpoint)
-            lastCheckpoint=checkpoint;
             checkpoint=i;
         std::vector<bool> answer;
         if(data.at(i)=="" && current.s_type!=PageType::Info){
-            --checkpoint;
             break;
         }
         switch(current.s_type){
