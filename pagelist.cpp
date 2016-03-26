@@ -7,8 +7,6 @@
 #include "hash.h"
 #include "lib.h"
 
-#include "initquestions.ignore.h"
-
 /**
  * @brief PageList::PageList
  * Ctor for PageList
