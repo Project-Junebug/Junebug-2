@@ -41,7 +41,7 @@ void MainWindow::on_info_nextButton_clicked(){
 }
 
 void MainWindow::on_text_nextButton_clicked(){
-    if(m_pageList.checkAnswer(ui->text_lineEdit->text())){
+    if(m_pageList.checkAnswer(ui->text_lineEdit->text().toLower())){
         update();
     } else {
         incorrect();
@@ -109,7 +109,7 @@ void MainWindow::update(){
  */
 void MainWindow::incorrect(){
     QMessageBox::critical(this, "Incorrect", "I'm sorry, I'm afraid that's the wrong answer.");
-    m_pageList.loadSaveData(m_pageList.getSaveData());
+    m_pageList.goToLastCheckpoint();
     update();
 }
 

@@ -58,6 +58,7 @@ public:
     Page getDisplayData() const;
     void loadSaveData(const QString& saveData) const;
     PageList();
+    void goToLastCheckpoint() const;
 
     //checkAnswers
     bool checkAnswer() const;
@@ -86,7 +87,7 @@ private:
      * @brief mM_saveData
      * Holds the answers so far
      */
-    mutable QString mM_saveData="";
+    mutable std::vector<QString> mM_saveData;
 
     /**
      * @brief m_list
@@ -105,6 +106,12 @@ private:
      * Holds the current Page
      */
     mutable Page m_current;
+
+    /**
+     * @brief mM_lastCheckpoint
+     * Holds the last checkpoint
+     */
+    mutable unsigned int mM_lastCheckpoint = 0;
 };
 
 #endif // PAGELIST_H

@@ -38,7 +38,7 @@ private slots:
 
 private:
     /**
-     * @brief mp_ui
+     * @brief ui
      * Holds the ui QObjects
      */
     Ui::MainWindow *ui;

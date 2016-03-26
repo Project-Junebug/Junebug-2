@@ -281,7 +281,7 @@
     <bool>true</bool>
    </property>
    <property name="text">
-    <string>Autosave enabled</string>
+    <string>Autosave - THIS IS BUGGY AND DOES NOT WORK</string>
    </property>
   </action>
  </widget>

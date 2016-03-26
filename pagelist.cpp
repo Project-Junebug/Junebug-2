@@ -7,6 +7,10 @@
 #include "hash.h"
 #include "lib.h"
 
+#ifdef ACTUAL_QUESTIONS
+#include "initquestions.ignore.h"
+#endif
+
 /**
  * @brief PageList::PageList
  * Ctor for PageList
@@ -21,8 +25,14 @@ PageList::PageList(){
  * @return The list of data to be written to save file
  */
 QString PageList::getSaveData() const {
-    mM_saveData.truncate(mM_saveData.lastIndexOf(CHECKPOINT_SPLIT)+1);
-    return mM_saveData;
+    QString ret="";
+
+    for (unsigned int i = 0; i < mM_saveData.size(); ++i) {
+        ret+=mM_saveData.at(i);
+        ret+=(m_list.at(i).s_isCheckpoint ? CHECKPOINT_SPLIT : SPLIT);
+    }
+
+    return ret;
 }
 
 /**
@@ -30,26 +40,24 @@ QString PageList::getSaveData() const {
  * @param saveData - list of data to be loaded
  */
 void PageList::loadSaveData(const QString& saveData) const {
-    //TODO 2.sav - we only got to test question? but we have the answer.
-    mM_saveData="";
-    QStringList data;
+    mM_saveData={};
     {
         QStringList split=saveData.split(CHECKPOINT_SPLIT);
 
         for (QString i: split) {
             for(QString j: i.split(SPLIT)){
-                data.append(j);
+                mM_saveData.push_back(j);
             }
         }
     }
     PageList list;
     unsigned int checkpoint = 0;
-    for (int i = 0; i < data.size(); ++i) {
+    for (unsigned int i = 0; i < mM_saveData.size(); ++i) {
         Page current = list.getDisplayData();
         if(current.s_isCheckpoint)
             checkpoint=i;
         std::vector<bool> answer;
-        if(data.at(i)=="" && current.s_type!=PageType::Info){
+        if(mM_saveData.at(i)=="" && current.s_type!=PageType::Info){
             break;
         }
         switch(current.s_type){
@@ -58,11 +66,11 @@ void PageList::loadSaveData(const QString& saveData) const {
                 loadError();
             break;
         case(PageType::Textbox):
-            if(!list.checkAnswer(data.at(i)))
+            if(!list.checkAnswer(mM_saveData.at(i)))
                 loadError();
             break;
         case(PageType::Checkbox):
-            for(QString j: data.at(i)){
+            for(QString j: mM_saveData.at(i)){
                 answer.push_back(j.toInt());
             }
             if(!list.checkAnswer(answer))
@@ -74,8 +82,8 @@ void PageList::loadSaveData(const QString& saveData) const {
     }
 
     mM_counter=checkpoint;
-    mM_saveData=list.getSaveData();
-    mM_saveData.chop(1);
+    mM_saveData=list.mM_saveData;
+    mM_saveData.pop_back();
 }
 
 /**
@@ -101,7 +109,8 @@ bool PageList::checkAnswer() const {
     assert(m_current.s_type==PageType::Info);
     assert(mM_counter+1<m_list.size());
     ++mM_counter;
-    mM_saveData+=(m_current.s_isCheckpoint ? CHECKPOINT_SPLIT : SPLIT);
+    mM_saveData.push_back("");
+    if(m_current.s_isCheckpoint) mM_lastCheckpoint=mM_counter;
     return true;
 }
 
@@ -113,9 +122,8 @@ bool PageList::checkAnswer(const QString& answer) const {
 
     if(lib::contains(m_current.s_answers, hash)){
         ++mM_counter;
-        mM_saveData+=answer;
-        mM_saveData+=(m_current.s_isCheckpoint ? CHECKPOINT_SPLIT : SPLIT);
-
+        mM_saveData.push_back(answer);
+        if(m_current.s_isCheckpoint) mM_lastCheckpoint=mM_counter;
         return true;
     }
     return false;
@@ -135,9 +143,8 @@ bool PageList::checkAnswer(const std::vector<bool> &answers) const{
     //answer is now a QString like "1011"
     if(lib::contains(m_current.s_answers, HASHOAT(answer.toUtf8().constData()))){
         ++mM_counter;
-        mM_saveData+=answer;
-        mM_saveData+=(m_current.s_isCheckpoint ? CHECKPOINT_SPLIT : SPLIT);
-
+        mM_saveData.push_back(answer);
+        if(m_current.s_isCheckpoint) mM_lastCheckpoint=mM_counter;
         return true;
     }
     return false;
@@ -147,6 +154,10 @@ void PageList::loadError() const {
     QMessageBox::critical(0, "Load Error", "I'm sorry, something's wrong with your save. If you've tried to modify it,"
                                            "put it back how it was.");
     exit(-1);
+}
+
+void PageList::goToLastCheckpoint() const {
+    mM_counter=mM_lastCheckpoint;
 }
 
 #ifndef ACTUAL_QUESTIONS
