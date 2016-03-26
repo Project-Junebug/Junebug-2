@@ -25,3 +25,5 @@ HEADERS  += mainwindow.h \
     lib.h \
     initquestions.ignore.h
 FORMS    += mainwindow.ui
+
+win32:RC_ICONS += icon.ico
