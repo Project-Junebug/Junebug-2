@@ -29,7 +29,7 @@ QString PageList::getSaveData() const {
 
     for (unsigned int i = 0; i < mM_saveData.size(); ++i) {
         ret+=mM_saveData.at(i);
-        ret+=(m_list.at(i).s_isCheckpoint ? CHECKPOINT_SPLIT : SPLIT);
+        ret+=SPLIT;
     }
 
     return ret;
@@ -40,50 +40,23 @@ QString PageList::getSaveData() const {
  * @param saveData - list of data to be loaded
  */
 void PageList::loadSaveData(const QString& saveData) const {
-    mM_saveData={};
-    {
-        QStringList split=saveData.split(CHECKPOINT_SPLIT);
+    mM_saveData=saveData.split(SPLIT).toVector().toStdVector();
 
-        for (QString i: split) {
-            for(QString j: i.split(SPLIT)){
-                mM_saveData.push_back(j);
-            }
-        }
+    std::vector<unsigned int> hashData;
+    std::vector<Page> pages;
+
+
+    for(unsigned int i = 0; i < mM_saveData.size(); ++i) {
+        hashData.push_back(HASHOAT(mM_saveData.at(i).toUtf8().constData()));
+        pages.push_back(m_list.at(i));
     }
-    PageList list;
-    unsigned int checkpoint = 0;
-    for (unsigned int i = 0; i < mM_saveData.size(); ++i) {
-        Page current = list.getDisplayData();
-        if(current.s_isCheckpoint)
-            checkpoint=i;
-        std::vector<bool> answer;
-        if(mM_saveData.at(i)=="" && current.s_type!=PageType::Info){
-            break;
-        }
-        switch(current.s_type){
-        case(PageType::Info):
-            if(!list.checkAnswer())
-                loadError();
-            break;
-        case(PageType::Textbox):
-            if(!list.checkAnswer(mM_saveData.at(i)))
-                loadError();
-            break;
-        case(PageType::Checkbox):
-            for(QString j: mM_saveData.at(i)){
-                answer.push_back(j.toInt());
-            }
-            if(!list.checkAnswer(answer))
-                loadError();
-            break;
-        default:
+    for(mM_counter = 0; mM_counter < hashData.size(); ++mM_counter) {
+
+        if(!lib::contains(pages.at(mM_counter).s_answers, hashData.at(mM_counter))){
             break;
         }
     }
 
-    mM_counter=checkpoint;
-    mM_saveData=list.mM_saveData;
-    mM_saveData.pop_back();
 }
 
 /**
@@ -91,10 +64,6 @@ void PageList::loadSaveData(const QString& saveData) const {
  * @return A page only populated with only s_type, s_text, s_isCheckpoint, and s_prompt. s_answer is {0}
  */
 Page PageList::getDisplayData() const {
-    if(mM_counter==34||mM_counter==29){
-        qDebug()<<mM_counter;
-        qDebug()<<"";
-    }
     assert(mM_counter<m_list.size());
     m_current = m_list.at(mM_counter);
     return Page(m_current.s_type, QString::number(m_numbers.at(mM_counter))+") "+m_current.s_text,{0},
@@ -110,7 +79,6 @@ bool PageList::checkAnswer() const {
     assert(mM_counter+1<m_list.size());
     ++mM_counter;
     mM_saveData.push_back("");
-    if(m_current.s_isCheckpoint) mM_lastCheckpoint=mM_counter;
     return true;
 }
 
@@ -123,7 +91,6 @@ bool PageList::checkAnswer(const QString& answer) const {
     if(lib::contains(m_current.s_answers, hash)){
         ++mM_counter;
         mM_saveData.push_back(answer);
-        if(m_current.s_isCheckpoint) mM_lastCheckpoint=mM_counter;
         return true;
     }
     return false;
@@ -144,20 +111,9 @@ bool PageList::checkAnswer(const std::vector<bool> &answers) const{
     if(lib::contains(m_current.s_answers, HASHOAT(answer.toUtf8().constData()))){
         ++mM_counter;
         mM_saveData.push_back(answer);
-        if(m_current.s_isCheckpoint) mM_lastCheckpoint=mM_counter;
         return true;
     }
     return false;
-}
-
-void PageList::loadError() const {
-    QMessageBox::critical(0, "Load Error", "I'm sorry, something's wrong with your save. If you've tried to modify it,"
-                                           "put it back how it was.");
-    exit(-1);
-}
-
-void PageList::goToLastCheckpoint() const {
-    mM_counter=mM_lastCheckpoint;
 }
 
 #ifndef ACTUAL_QUESTIONS

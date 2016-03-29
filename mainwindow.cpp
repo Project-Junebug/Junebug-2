@@ -109,7 +109,7 @@ void MainWindow::update(){
  */
 void MainWindow::incorrect(){
     QMessageBox::critical(this, "Incorrect", "I'm sorry, I'm afraid that's the wrong answer.");
-    m_pageList.goToLastCheckpoint();
+    m_pageList.loadSaveData(m_pageList.getSaveData());
     update();
 }
 
@@ -168,11 +168,11 @@ void MainWindow::on_actionLoad_triggered(){
         QTextStream in(&file);
 
         m_pageList.loadSaveData(in.readAll());
-        update();
 
         file.close();
         m_saveLocation=fileName;
     }
+    update();
 }
 
 bool MainWindow::warn(){

@@ -2,7 +2,6 @@
 #define PAGELIST_H
 
 #define SPLIT "\u0011"
-#define CHECKPOINT_SPLIT "\u0012"
 
 #include <QString>
 #include <QStringList>
@@ -32,7 +31,7 @@ struct Page {
      * @param answer - The answer to the question to be hashed using SHA-3
      * @param prompt
      */
-    Page(PageType type, QString text, std::vector<unsigned int> answers={}, bool isCheckpoint=false,
+    Page(PageType type, QString text, std::vector<unsigned int> answers={0}, bool isCheckpoint=false,
          QString prompt="Put your answer here..."){
         assert((type==PageType::Checkbox)==(prompt.contains(SPLIT)));
         s_type=type;
@@ -72,12 +71,6 @@ private:
     void initPages();
 
     /**
-     * @brief loadError
-     * Called when the load fails
-     */
-    void loadError() const;
-
-    /**
      * @brief mM_counter
      * Holds the question counter
      */
@@ -106,12 +99,6 @@ private:
      * Holds the current Page
      */
     mutable Page m_current;
-
-    /**
-     * @brief mM_lastCheckpoint
-     * Holds the last checkpoint
-     */
-    mutable unsigned int mM_lastCheckpoint = 0;
 };
 
 #endif // PAGELIST_H
