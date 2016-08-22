@@ -2,6 +2,7 @@
 #define HASH_H
 
 #include <cctype>
+#include <string>
 
 #define DEFAULT_SIZE 1009
 
@@ -75,8 +76,9 @@ constexpr unsigned int HASHOAT( const char* str, const std::size_t size=DEFAULT_
  * @param length - length of the string
  * @return the hash of a string
  */
-constexpr unsigned int operator"" _HASH(char const* str, unsigned int length){
+constexpr unsigned int operator ""_HASH(char const* str, unsigned int length){
     return HASHOAT(str, length*0+DEFAULT_SIZE); //To stop "unused parameter" warnings
 }
 
-#endif // HASH_H
+#endif /* HASH_H */
+

@@ -9,6 +9,8 @@
 
 #include <vector>
 
+#include "QuestionList.h"
+
 /**
  * @brief MainWindow::MainWindow
  * @param parent - Parent QWidget
@@ -36,12 +38,15 @@ MainWindow::~MainWindow(){
 }
 
 void MainWindow::on_info_nextButton_clicked(){
-    m_pageList.checkAnswer();
+    if(m_questionList.testAnswer("")){
+        m_questionList.advance();
+    }
     update();
 }
 
 void MainWindow::on_text_nextButton_clicked(){
-    if(m_pageList.checkAnswer(ui->text_lineEdit->text().toLower())){
+    if(m_questionList.testAnswer(ui->text_lineEdit->text().toStdString())){
+        m_questionList.advance();
         update();
     } else {
         incorrect();
@@ -50,20 +55,19 @@ void MainWindow::on_text_nextButton_clicked(){
 }
 
 void MainWindow::on_check_nextButton_clicked(){
-    if(m_pageList.checkAnswer({
-                              ui->check_1->checkState()==Qt::Checked,
-                              ui->check_2->checkState()==Qt::Checked,
-                              ui->check_3->checkState()==Qt::Checked,
-                              ui->check_4->checkState()==Qt::Checked
-})){
+    std::string answer="";
+    for(auto i: {ui->check_1, ui->check_2, ui->check_3, ui->check_4}){
+        answer+=(i->checkState()==Qt::Checked)?"1":"0";
+    }
+    if(m_questionList.testAnswer(answer)){
+        m_questionList.advance();
         update();
     } else {
         incorrect();
     }
-    ui->check_1->setChecked(false);
-    ui->check_2->setChecked(false);
-    ui->check_3->setChecked(false);
-    ui->check_4->setChecked(false);
+    for(auto i: {ui->check_1, ui->check_2, ui->check_3, ui->check_4}){
+        i->setChecked(false);
+    }
 }
 
 /**
@@ -71,33 +75,33 @@ void MainWindow::on_check_nextButton_clicked(){
  * Updates the window to show m_pageList.getDisplayData();
  */
 void MainWindow::update(){
-    m_current=m_pageList.getDisplayData();
-    if(m_current.s_isCheckpoint
-            && m_saveLocation!=NULL_SAVE_FILE
-            && m_autoSaveEnabled)
+    if(m_questionList.isCurrentCheckpoint() && m_saveLocation!=NULL_SAVE_FILE && m_autoSaveEnabled){
         on_actionSave_triggered();
-    QStringList list = m_current.s_prompt.split(SPLIT);
-    switch (m_current.s_type) {
-    case PageType::Info:
+    }
+
+    QCheckBox* checkArray[4]={ui->check_1, ui->check_2, ui->check_3, ui->check_4};
+    const std::string* labels=m_questionList.getLabels();
+
+    switch (m_questionList.getType()) {
+    case QuestionType::INFO:
         ui->stackedWidget->setCurrentWidget(ui->info);
-        ui->info_label->setText(m_current.s_text);
+        ui->info_label->setText(m_questionList.getText().c_str());
         break;
-    case PageType::Textbox:
+    case QuestionType::BASE:
         ui->stackedWidget->setCurrentWidget(ui->text);
-        ui->text_label->setText(m_current.s_text);
-        ui->text_lineEdit->setPlaceholderText(m_current.s_prompt);
+        ui->text_label->setText(m_questionList.getText().c_str());
+        //ui->text_lineEdit->setPlaceholderText(m_current.s_prompt);
         break;
-    case PageType::Checkbox:
+    case QuestionType::CHECKBOX:
         ui->stackedWidget->setCurrentWidget(ui->check);
-        ui->check_1->setText(list.at(0));
-        ui->check_2->setText(list.at(1));
-        ui->check_3->setText(list.at(2));
-        ui->check_4->setText(list.at(3));
-        ui->check_label->setText(m_current.s_text);
+        for(unsigned int i=0; i<4; i++){
+            checkArray[i]->setText(labels[i].c_str());
+        }
+        ui->check_label->setText(m_questionList.getText().c_str());
         break;
-    case PageType::Terminator:
+    case QuestionType::TERMINATOR:
         ui->stackedWidget->setCurrentWidget(ui->terminator);
-        ui->terminator_label->setText(m_current.s_text);
+        ui->terminator_label->setText(m_questionList.getText().c_str());
     default:
         break;
     }
@@ -109,7 +113,7 @@ void MainWindow::update(){
  */
 void MainWindow::incorrect(){
     QMessageBox::critical(this, "Incorrect", "I'm sorry, I'm afraid that's the wrong answer.");
-    m_pageList.loadSaveData(m_pageList.getSaveData());
+    m_questionList.loadSaveData(m_questionList.getSaveData());//I'm so sorry
     update();
 }
 
@@ -117,61 +121,22 @@ void MainWindow::on_text_lineEdit_returnPressed(){
     on_text_nextButton_clicked();
 }
 
-
-
 void MainWindow::on_actionSave_triggered(){
     if(m_saveLocation==NULL_SAVE_FILE) on_actionSave_As_triggered();
-    else saveTo(m_saveLocation);
+    else m_questionList.saveTo(m_saveLocation.toStdString());
 }
 
 void MainWindow::on_actionSave_As_triggered(){
-    saveTo(QFileDialog::getSaveFileName(this, tr("Save File"), QString(),
-                                        tr("Save Files (*.sav)")));
-}
-
-/**
- * @brief MainWindow::saveTo
- * @param fileName - location to save to
- * Saves the m_pageList.mM_saveData
- */
-void MainWindow::saveTo(QString fileName){
-    if (!fileName.isEmpty()) {
-        QFile file(fileName);
-        if (!file.open(QIODevice::WriteOnly)) {
-            QMessageBox::critical(this, tr("Error"), tr("Could not save file"));
-        } else {
-            file.remove();
-            file.open(QIODevice::WriteOnly);
-            QTextStream stream(&file);
-            stream << m_pageList.getSaveData();
-            stream.flush();
-            file.close();
-            m_saveLocation=fileName;
-        }
-    }
+    m_questionList.saveTo(QFileDialog::getSaveFileName(this, tr("Save File"), QString(),
+                                        tr("Save Files (*.sav)")).toStdString());
 }
 
 void MainWindow::on_actionLoad_triggered(){
     if(!warn()) return;
 
-    m_pageList=PageList();
-
     QString fileName = QFileDialog::getOpenFileName(this, tr("Open File"), QString(),
                                                     tr("Save Files (*.sav)"));
-
-    if (!fileName.isEmpty()) {
-        QFile file(fileName);
-        if (!file.open(QIODevice::ReadOnly)) {
-            QMessageBox::critical(this, tr("Error"), tr("Could not open file"));
-            return;
-        }
-        QTextStream in(&file);
-
-        m_pageList.loadSaveData(in.readAll());
-
-        file.close();
-        m_saveLocation=fileName;
-    }
+    m_questionList.loadFrom(fileName.toStdString());
     update();
 }
 
@@ -187,7 +152,7 @@ bool MainWindow::warn(){
 
 void MainWindow::on_actionNew_triggered(){
     if(!warn()) return;
-    m_pageList=PageList();
+    m_questionList=QuestionList();
     update();
 }
 

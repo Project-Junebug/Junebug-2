@@ -4,7 +4,7 @@
 #include <QMainWindow>
 #include <QString>
 
-#include "pagelist.h"
+#include "QuestionList.h"
 
 #define NULL_SAVE_FILE "\u0013"
 
@@ -46,13 +46,7 @@ private:
     /**
      * @brief m_pageList
      */
-    PageList m_pageList;
-
-    /**
-     * @brief m_current
-     * Holds the current display data
-     */
-    Page m_current;
+    QuestionList m_questionList;
 
     /**
      * @brief m_saveLocation
@@ -64,8 +58,6 @@ private:
 
     void update();
     void incorrect();
-    void saveTo(QString fileName);
-    void load(const bool& debug=false);
     bool warn();
 };
 

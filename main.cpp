@@ -3,8 +3,6 @@
 #include <QApplication>
 #include <QDebug>
 
-#include "hash.h"
-
 /**
  * @brief main
  * @param argc Command line argument count
