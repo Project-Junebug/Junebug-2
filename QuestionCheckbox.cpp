@@ -1,11 +1,3 @@
-
-/* 
- * File:   QuestionCheckbox.cpp
- * Author: Joseph
- * 
- * Created on 07 August 2016, 11:51
- */
-
 #include "QuestionCheckbox.h"
 
 QuestionCheckbox::QuestionCheckbox(const std::string &info, const std::vector<hashtype> &ansHash, const std::string (&labels)[4]):

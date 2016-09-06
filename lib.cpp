@@ -12,10 +12,6 @@
 
 namespace lib{
 
-hashtype HASH(std::string str){
-    return HASHOAT(str.c_str(), DEFAULT_SIZE);
-}
-
 
 int find(const hashtype& object, const std::vector<hashtype, std::allocator<hashtype> >& vector){
     for (unsigned int i = 0; i < vector.size(); i++) {

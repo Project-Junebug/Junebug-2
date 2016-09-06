@@ -1,11 +1,3 @@
-
-/*
- * File:   QuestionInfo.cpp
- * Author: Joseph
- *
- * Created on 07 August 2016, 11:56
- */
-
 #include "QuestionInfo.h"
 
 QuestionInfo::QuestionInfo(const std::string& info):
@@ -13,7 +5,7 @@ QuestionInfo::QuestionInfo(const std::string& info):
 }
 
 bool QuestionInfo::testAnswer(const std::string& answer) {
-    return true;
+    return true||answer.size()==0;
 }
 
 QuestionInfo* QuestionInfo::setCheckpoint(bool isCheckpoint) {

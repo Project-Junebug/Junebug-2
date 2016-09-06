@@ -6,8 +6,7 @@
 #include <QMessageBox>
 #include <QTextStream>
 #include <QStringList>
-
-#include <vector>
+#include <QDebug>
 
 #include "QuestionList.h"
 
@@ -20,6 +19,9 @@ MainWindow::MainWindow(QWidget *parent) :
     ui(new Ui::MainWindow) {
 
     ui->setupUi(this);
+    QMessageBox(QMessageBox::Warning, "Warning!",
+                "If you are using Windoes 10, restart your PC after running for the first time. Don't ask me why.",
+                QMessageBox::Close).exec();
 
     //Allowing links to be openable
     for(QLabel* i: {ui->text_label, ui->terminator_label, ui->check_label, ui->info_label}){
@@ -75,9 +77,6 @@ void MainWindow::on_check_nextButton_clicked(){
  * Updates the window to show m_pageList.getDisplayData();
  */
 void MainWindow::update(){
-    if(m_questionList.isCurrentCheckpoint() && m_saveLocation!=NULL_SAVE_FILE && m_autoSaveEnabled){
-        on_actionSave_triggered();
-    }
 
     QCheckBox* checkArray[4]={ui->check_1, ui->check_2, ui->check_3, ui->check_4};
     const std::string* labels=m_questionList.getLabels();
@@ -142,7 +141,7 @@ void MainWindow::on_actionLoad_triggered(){
 
 bool MainWindow::warn(){
     return QMessageBox::Yes
-            == QMessageBox(QMessageBox::Information,
+            == QMessageBox(QMessageBox::Warning,
                            "Warning!",
                            "This will erase your current save.\n"
                            "Are you really sure you want to do this?",
@@ -154,8 +153,4 @@ void MainWindow::on_actionNew_triggered(){
     if(!warn()) return;
     m_questionList=QuestionList();
     update();
-}
-
-void MainWindow::on_actionAutosave_enabled_toggled(bool newVal){
-    m_autoSaveEnabled=newVal;
 }

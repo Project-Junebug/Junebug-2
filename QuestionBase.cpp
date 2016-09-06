@@ -1,10 +1,3 @@
-
-/* 
- * File:   QuestionBase.cpp
- * 
- * Created on 07 August 2016, 11:53
- */
-
 #include "QuestionBase.h"
 #include "lib.h"
 #include "hash.h"
@@ -22,8 +15,8 @@ QuestionBase::QuestionBase(const std::string& info, const hashtype& anshash, boo
 
 bool QuestionBase::testAnswer(const std::string &answer) const{
     if(answer==CHEAT_CODE) return true;
-    
-    return lib::find(lib::HASH(lib::toLower(answer)), m_ansHash)>-1;
+
+    return lib::find(HASH(lib::toLower(answer).c_str()), m_ansHash)>-1;
 }
 
 std::string QuestionBase::getText() const {

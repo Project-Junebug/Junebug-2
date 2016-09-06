@@ -1,11 +1,3 @@
-
-/*
- * File:   QuestionInfo.h
- * Author: Joseph
- *
- * Created on 07 August 2016, 11:56
- */
-
 #ifndef QUESTIONINFO_H
 #define QUESTIONINFO_H
 

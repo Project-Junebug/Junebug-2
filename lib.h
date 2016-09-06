@@ -8,7 +8,6 @@
 #include "QuestionBase.h"
 
 namespace lib{
-hashtype HASH(std::string str);
 
 int find(const hashtype& object, const std::vector<hashtype, std::allocator<hashtype> >& vector);
 

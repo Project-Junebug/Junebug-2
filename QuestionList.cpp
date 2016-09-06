@@ -9,6 +9,7 @@
 #include "QuestionCheckbox.h"
 #include "QuestionInfo.h"
 #include "lib.h"
+#include "hash.h"
 
 #define DC1 "\u0012"
 #define DC2 "\u0013"
@@ -84,7 +85,7 @@ std::string QuestionList::getSaveData() const{
         writeData+=m_saveData[i];
         writeData+=(i<m_saveData.size()-1)?DC1:"";
     }
-    writeData=std::to_string(lib::HASH(writeData))+DC2+writeData;
+    writeData=std::to_string(HASH(writeData.c_str()))+DC2+writeData;
     return lib::xorEncode(writeData);
 }
 

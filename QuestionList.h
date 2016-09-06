@@ -1,11 +1,3 @@
-
-/*
- * File:   QuestionList.h
- * Author: Joseph
- *
- * Created on 07 August 2016, 11:55
- */
-
 #ifndef QUESTIONLIST_H
 #define QUESTIONLIST_H
 
