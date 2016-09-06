@@ -34,6 +34,8 @@ private slots:
     void on_actionLoad_triggered();
     void on_actionNew_triggered();
 
+    void closeEvent(QCloseEvent *event);
+
 private:
     /**
      * @brief ui

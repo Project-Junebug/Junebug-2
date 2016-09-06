@@ -7,6 +7,7 @@
 #include <QTextStream>
 #include <QStringList>
 #include <QDebug>
+#include <QCloseEvent>
 
 #include "QuestionList.h"
 
@@ -153,4 +154,16 @@ void MainWindow::on_actionNew_triggered(){
     if(!warn()) return;
     m_questionList=QuestionList();
     update();
+}
+
+void MainWindow::closeEvent(QCloseEvent *event){
+    QMessageBox::StandardButton resBtn = QMessageBox::question( this, "Junebug 2",
+                                                                tr("Are you sure you want to quit?\n"),
+                                                                QMessageBox::No | QMessageBox::Yes,
+                                                                QMessageBox::Yes);
+    if (resBtn != QMessageBox::Yes) {
+        event->ignore();
+    } else {
+        event->accept();
+    }
 }
