@@ -20,7 +20,7 @@ MainWindow::MainWindow(QWidget *parent) :
 
     ui->setupUi(this);
     QMessageBox(QMessageBox::Warning, "Warning!",
-                "If you are using Windoes 10, restart your PC after running for the first time. Don't ask me why.",
+                "If you are using Windows 10, restart your PC after running for the first time. Don't ask me why.",
                 QMessageBox::Close).exec();
 
     //Allowing links to be openable
