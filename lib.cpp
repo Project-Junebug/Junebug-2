@@ -12,12 +12,11 @@
 
 namespace lib{
 
-
 int find(const hashtype& object, const std::vector<hashtype, std::allocator<hashtype> >& vector){
     for (unsigned int i = 0; i < vector.size(); i++) {
-    if(vector[i]==object){
-        return i;
-    }
+        if(vector[i]==object){
+            return i;
+        }
     }
     return -1;
 

@@ -2,7 +2,10 @@
 #include "lib.h"
 #include "hash.h"
 
+#include <cassert>
+
 QuestionBase::QuestionBase(const std::string &info, const std::vector<hashtype> &ansHash, bool isCheckpoint){
+    assert(ansHash.size()>0);
     m_info = info;
     m_ansHash = ansHash;
     m_isCheckpoint=isCheckpoint;

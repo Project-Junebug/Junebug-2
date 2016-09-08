@@ -269,14 +269,6 @@
     <string>Ctrl+Shift+S</string>
    </property>
   </action>
-  <action name="actionAutosave_enabled">
-   <property name="checkable">
-    <bool>true</bool>
-   </property>
-   <property name="text">
-    <string>Autosave - THIS IS BUGGY AND DOES NOT WORK</string>
-   </property>
-  </action>
  </widget>
  <layoutdefault spacing="6" margin="11"/>
  <resources/>

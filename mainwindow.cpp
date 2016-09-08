@@ -11,6 +11,8 @@
 
 #include "QuestionList.h"
 
+#include <cassert>
+
 /**
  * @brief MainWindow::MainWindow
  * @param parent - Parent QWidget
@@ -93,6 +95,7 @@ void MainWindow::update(){
         //ui->text_lineEdit->setPlaceholderText(m_current.s_prompt);
         break;
     case QuestionType::CHECKBOX:
+        assert(labels!=nullptr);
         ui->stackedWidget->setCurrentWidget(ui->check);
         for(unsigned int i=0; i<4; i++){
             checkArray[i]->setText(labels[i].c_str());

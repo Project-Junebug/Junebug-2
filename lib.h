@@ -22,6 +22,7 @@ std::vector<std::string> split(const std::string& s, const char* c);
 
 std::string xorEncode(const std::string& toEncrypt);
 constexpr const char* xorEncode(const char* string, size_t strlen);
+
 }
 
 #endif /* LIB_H */

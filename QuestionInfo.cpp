@@ -5,7 +5,7 @@ QuestionInfo::QuestionInfo(const std::string& info):
 }
 
 bool QuestionInfo::testAnswer(const std::string& answer) {
-    return true||answer.size()==0;
+    return true;
 }
 
 QuestionInfo* QuestionInfo::setCheckpoint(bool isCheckpoint) {
