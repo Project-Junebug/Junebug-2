@@ -14,8 +14,6 @@ QuestionBase::QuestionBase(const std::string& info, const hashtype& anshash, boo
 }
 
 bool QuestionBase::testAnswer(const std::string &answer) const{
-    if(answer==CHEAT_CODE) return true;
-
     return lib::find(HASH(lib::toLower(answer).c_str()), m_ansHash)>-1;
 }
 

@@ -4,8 +4,6 @@
 #include <string>
 #include <vector>
 
-#define CHEAT_CODE "uuddlrlrba"
-
 typedef unsigned int hashtype;
 
 enum class QuestionType : char {

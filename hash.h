@@ -50,8 +50,7 @@ static constexpr unsigned int crc_table[256] = {
 
 template<int size, int idx = 0, class dummy = void>
 struct MM{
-  static constexpr unsigned int crc32(const char * str, unsigned int prev_crc = 0xFFFFFFFF)
-  {
+  static constexpr unsigned int crc32(const char * str, unsigned int prev_crc = 0xFFFFFFFF){
       return MM<size, idx+1>::crc32(str, (prev_crc >> 8) ^ crc_table[(prev_crc ^ str[idx]) & 0xFF] );
   }
 };
@@ -59,8 +58,7 @@ struct MM{
 // This is the stop-recursion function
 template<int size, class dummy>
 struct MM<size, size, dummy>{
-  static constexpr unsigned int crc32(const char * str, unsigned int prev_crc = 0xFFFFFFFF)
-  {
+  static constexpr unsigned int crc32(const char * str, unsigned int prev_crc = 0xFFFFFFFF){
       return prev_crc^ 0xFFFFFFFF;
   }
 };
