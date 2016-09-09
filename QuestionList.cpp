@@ -100,6 +100,9 @@ void QuestionList::loadSaveData(const std::string& saveData){
     }
     std::vector<std::string> newData={};
     newData=lib::split(answers, DC1);
+    if(newData.at(2)==""){
+        newData.erase(newData.begin());
+    }
     int lastCheckpoint=0;
     {
         QuestionList testList = QuestionList();
@@ -109,10 +112,10 @@ void QuestionList::loadSaveData(const std::string& saveData){
                 qDebug()<<"File could not be loaded";
                 return;
             }
-            testList.advance();
             if(testList.isCurrentCheckpoint()){
                 lastCheckpoint=i;
             }
+            testList.advance();
         }
         bool boolArray[3]={false};
         boolArray[0]=testList.getType()==QuestionType::INFO;
@@ -122,9 +125,10 @@ void QuestionList::loadSaveData(const std::string& saveData){
             testList.advance();
             ++lastCheckpoint;
         }
+        delete[] boolArray;
     }
 
-    newData.resize(lastCheckpoint+1);
+    newData.resize(lastCheckpoint);
     m_saveData=newData;
     m_counter=lastCheckpoint;
 }
